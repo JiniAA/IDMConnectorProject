@@ -19,7 +19,7 @@ public class ConstantsUsed {
 
 
     final static String filePath
-            = "/home/jini/IDM/configg";
+            = "/home/jini/IDM/config";
 
     public static void readFromFile() throws IOException {
         Map<String, String> mapFromFile
@@ -28,7 +28,7 @@ public class ConstantsUsed {
         us= mapFromFile.get("user");
         baseURI=mapFromFile.get("baseURL");
         endpoint=mapFromFile.get("end");
-        query=mapFromFile.get("query");
+        //query=mapFromFile.get("query");
 
         System.out.println(ps);
         System.out.println(us);

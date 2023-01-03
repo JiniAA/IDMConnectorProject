@@ -15,16 +15,20 @@ import java.util.Iterator;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-public class GeneralForAllApi extends ExecutionOfResponse{
+public class ResponseHandler extends ExecutionOfResponse{
     public static void ActionFunction2() {
         try {
             HttpCallsInitialization.GET(baseURI,endpoint,query, HttpCallsInitialization.getSSLCustomClient());
             HttpResponse response = HttpCallsInitialization.getResponse();
+            Integer statusCode = response.getStatusLine().getStatusCode();
+            System.out.println(statusCode);
+
             InputStream httpResponse= response.getEntity().getContent();
 
             JsonParser jsonParser =new JsonParser();
             JsonObject jsonObject= (JsonObject) jsonParser
                     .parse(new InputStreamReader(httpResponse,"UTF-8"));
+
 
             //iterator through keys of the jsonObject
             Set<String> keys = jsonObject.keySet();

@@ -10,10 +10,9 @@ import org.apache.http.impl.client.HttpClients;
 import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
 import org.apache.http.ssl.SSLContextBuilder;
 import org.apache.http.ssl.TrustStrategy;
+
 import javax.net.ssl.HostnameVerifier;
 import java.net.URI;
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
 import java.security.KeyManagementException;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
@@ -32,17 +31,9 @@ public class HttpCallsInitialization extends ConstantsUsed {
     // Get method
     public static void GET(String baseURI,String endpoint,String query, CloseableHttpClient httpClient) {
         try {
-
-//            CredentialsProvider credentialsPovider = new BasicCredentialsProvider();
-//            Credentials credentials = new UsernamePasswordCredentials("USERNAME", "PASSWORD");
-
-            //URI uri = new URIBuilder(baseURI + endpoint).setParameter("page", "2").header("Authorization", getBasicAuthenticationHeader("postman", "password")).build();
-            //URI uri = new URIBuilder(baseURI + endpoint).header("Authorization", getBasicAuthenticationHeader("GxNCBm6flOIgnujdqvT", "X")).build();
-//HttpGet httpGet = new HttpGet(uri);
-           // HttpRequest request1 = HttpRequest.newBuilder().GET().uri(new URI(baseURI + endpoint)).header("Authorization", getBasicAuthenticationHeader("GxNCBm6flOIgnujdqvT", "X")).build();
-           //HttpGet httpGet = new HttpGet(uri);
             HttpGet httpget = new HttpGet();
-            httpget.setURI(new URI(baseURI+endpoint+ URLEncoder.encode(query, StandardCharsets.UTF_8)));
+            //httpget.setURI(new URI(baseURI+endpoint+ URLEncoder.encode(query, StandardCharsets.UTF_8)));
+            httpget.setURI(new URI(baseURI+endpoint));
             httpget.addHeader("Authorization", getBasicAuthenticationHeader(us, ps));
             HttpResponse httpResponse = httpClient.execute(httpget);
             if (httpResponse != null) {
