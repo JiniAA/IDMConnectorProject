@@ -21,15 +21,14 @@ import java.security.cert.X509Certificate;
 import java.util.Base64;
 
 
-public class HttpCallsInitialization extends ConstantsUsed {
+public class HttpCallsInitialization extends GetAuthorizationDetails {
     private static HttpResponse response;
-
     private static final String getBasicAuthenticationHeader(String username, String password) {
         String valueToEncode = username + ":" + password;
         return "Basic " + Base64.getEncoder().encodeToString(valueToEncode.getBytes());
     }
     // Get method
-    public static void GET(String baseURI,String endpoint,String query, CloseableHttpClient httpClient) {
+    public static void GET(String baseURI,String endpoint, CloseableHttpClient httpClient) {
         try {
             HttpGet httpget = new HttpGet();
             //httpget.setURI(new URI(baseURI+endpoint+ URLEncoder.encode(query, StandardCharsets.UTF_8)));
@@ -72,14 +71,11 @@ public class HttpCallsInitialization extends ConstantsUsed {
         CloseableHttpClient client = clientBuilder.build();
         return client;
     }
-
-
     // Default client
     public static CloseableHttpClient getDefaultClient() {
         CloseableHttpClient closeableHttpClient = HttpClients.createDefault();
         return closeableHttpClient;
     }
-
     // In case your service is secure with SSL and Certs
     private static SSLConnectionSocketFactory getSSLContext() {
 

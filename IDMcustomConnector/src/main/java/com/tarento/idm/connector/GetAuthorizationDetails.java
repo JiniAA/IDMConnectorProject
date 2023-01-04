@@ -9,15 +9,12 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ConstantsUsed {
+public class GetAuthorizationDetails {
     public static String us = null;
     public static String ps = null;
     public static String baseURI =null;
     public static String endpoint =null;
     public static String query =null;
-
-
-
     final static String filePath
             = "/home/jini/IDM/config";
 
@@ -29,10 +26,6 @@ public class ConstantsUsed {
         baseURI=mapFromFile.get("baseURL");
         endpoint=mapFromFile.get("end");
         //query=mapFromFile.get("query");
-
-        System.out.println(ps);
-        System.out.println(us);
-
 }
     public static Map<String,String>HashMapFromTextFile()
     {
@@ -41,22 +34,17 @@ public class ConstantsUsed {
         BufferedReader br = null;
 
         try {
-
             // create file object
             File file = new File(filePath);
-
             // create BufferedReader object from the File
             br = new BufferedReader(new FileReader(file));
-
             String line = null;
-
             // read file line by line
             while ((line = br.readLine()) != null) {
                 // split the line by :
                 String[] parts = line.split("-");
                 String key = parts[0].trim();
                 String value = parts[1].trim();
-
                 // put key value pair to HashMap if they are not empty
                 if (!key.equals("") && !value.equals(""))
                     map.put(key,value);
@@ -93,15 +81,6 @@ public class ConstantsUsed {
 
 
 //    public static final String password="X";
-
-
-
-    public static final String enc="Basic";
-    public static final String encodingType="Base64";
-
-    //public static DSEEntry<String,String> entry1= new Gson().fromJson(jsonObject1.toString(),DSEEntry.class);
-
-
 
 
 }
