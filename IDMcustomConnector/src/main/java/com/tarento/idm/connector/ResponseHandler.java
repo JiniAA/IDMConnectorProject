@@ -9,14 +9,17 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
 import java.util.Set;
-import java.util.stream.Collectors;
 
-public class ResponseHandler extends ExecutionOfResponse{
-    public static void ActionFunction2() {
+public class ResponseHandler extends HttpCallsInitialization{
+    public static String FirstKey;
+    public static String f=null;
+
+    public static int flag;
+
+    public static Set<String> keys ;
+
+    public static void ActionFunction3() {
         try {
             HttpCallsInitialization.GET(baseURI,endpoint,query, HttpCallsInitialization.getSSLCustomClient());
             HttpResponse response = HttpCallsInitialization.getResponse();
@@ -28,48 +31,16 @@ public class ResponseHandler extends ExecutionOfResponse{
             JsonParser jsonParser =new JsonParser();
             JsonObject jsonObject= (JsonObject) jsonParser
                     .parse(new InputStreamReader(httpResponse,"UTF-8"));
+            //taking keys of the Jsonobject
+            keys = jsonObject.keySet();
+            //taking First key of the json response
+            FirstKey = keys.iterator().next();
+            System.out.println(FirstKey);
 
-
-            //iterator through keys of the jsonObject
-            Set<String> keys = jsonObject.keySet();
-            Iterator i = keys.iterator();
-
-            ArrayList arrayList2 =new ArrayList();
-            while (i.hasNext()) {
-                //keys in the jsonObject
-                System.out.println("keys="+ i.next());
-            }
-            //values of the keys
-           // Collection getValues = jsonObject.entrySet();
-           // Set<Map.Entry<String, JsonElement>> getValues = jsonObject.entrySet();
-            Collection getValues = jsonObject.entrySet().stream().map(stringJsonElementEntry -> stringJsonElementEntry.getValue()).collect(Collectors.toList());
-            System.out.println("full values"+getValues);
-           Iterator ii = getValues.iterator();
-            while (ii.hasNext()) {
-//                System.out.println(i.next().toString());
-//                System.out.println(getValues.size());
-                JsonArray el=jsonObject.getAsJsonArray(ii.next().toString());
-                System.out.println("el"+el);
-
-
-            }
-
-
-//            Iterator iter = arrayList2.iterator();
-//
-//            try {
-//                while (iter.hasNext()){
-//                    JsonArray li ;
-//                    li = (JsonArray) iter.next();
-//                    System.out.println("iter.next="+iter.next());
-//                    HashMap<String,String> entry2= new Gson().fromJson(li.toString(), DSEEntry.class);
-//                    entry= (DSEEntry) entry2;
-//
-//                }
-//            } catch (Exception e) {
-//                throw new RuntimeException(e);
-//            }
-            //return entry;
+            //calling flattenJsonObject Function to iterate through the json response
+            flattenJSONObject(jsonObject,f);
+            System.out.println("DSEentry"+entry);
+            System.out.println(entry.size());
         } catch (UnsupportedEncodingException e) {
             throw new RuntimeException(e);
         } catch (IOException e) {
@@ -77,5 +48,55 @@ public class ResponseHandler extends ExecutionOfResponse{
         }
 
     }
+
+    public static void flattenJSONObject(JsonObject jsonObject1,String firstKey){
+        Set<String> keyss = jsonObject1.keySet();
+        for (String key : keyss) {
+            //String entryKey = (firstKey == null) ? key : (String.valueOf(firstKey) + '.' + key);
+            String entryKey =key;
+//            System.out.println("entry key "+entryKey);
+            //System.out.println("key "+key+"\ngetkey "+jsonObject1.get(key));
+            Object value = jsonObject1.get(key);
+            //System.out.println("value "+value);
+            if (value instanceof JsonObject) {
+                flag=0;
+                System.out.println("flag "+flag);
+                System.out.println(((JsonObject) value).keySet());
+
+                flattenJSONObject((JsonObject) value, entryKey);
+                continue;
+            }
+            if (value instanceof JsonArray) {
+                if(((JsonArray) value).isJsonObject()) {
+                    flattenJSONArray(((JsonArray) value).getAsJsonObject().getAsJsonArray(), key);
+
+                }
+                else
+                    entry.put(entryKey, value.toString());
+
+                continue;
+            }
+            entry.put(entryKey, value.toString());
+
+        }
+
+
+    }
+
+    public static void flattenJSONArray(JsonArray jsonArray,String firstKeys){
+        for (int i = 0; i < jsonArray.size()+1; i++) {
+            String entryKey = (firstKeys == null) ? "" : (String.valueOf(firstKeys) + "[" + i + "]");
+            //String entryKey = firstKeys;
+            Object object = jsonArray.get(i);
+            if (object instanceof JsonObject) {
+                flattenJSONObject((JsonObject) object, entryKey);
+            } else if (object instanceof JsonArray) {
+                flattenJSONArray((JsonArray) object, entryKey);
+            }
+            entry.put(entryKey, object.toString());
+        }
+
+    }
+
 
 }
