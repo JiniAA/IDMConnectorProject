@@ -67,12 +67,15 @@ public class ResponseHandler extends HttpCallsInitialization{
                 continue;
             }
             if (value instanceof JsonArray) {
-                if(((JsonArray) value).isJsonObject()) {
-                    flattenJSONArray(((JsonArray) value).getAsJsonObject().getAsJsonArray(), key);
-
-                }
-                else
+                if(value.equals("[]"))
                     entry.put(entryKey, value.toString());
+                //if(((JsonArray) value).isJsonObject()) {
+                    //flattenJSONArray(((JsonArray) value).getAsJsonObject().getAsJsonArray(), key);
+                else
+                flattenJSONArray((JsonArray) value,key);
+               // }
+//                else
+//                    entry.put(entryKey, value.toString());
 
                 continue;
             }
@@ -84,7 +87,7 @@ public class ResponseHandler extends HttpCallsInitialization{
     }
 
     public static void flattenJSONArray(JsonArray jsonArray,String firstKeys){
-        for (int i = 0; i < jsonArray.size()+1; i++) {
+            for (int i = 0; i < jsonArray.size(); i++) {
             String entryKey = (firstKeys == null) ? "" : (String.valueOf(firstKeys) + "[" + i + "]");
             //String entryKey = firstKeys;
             Object object = jsonArray.get(i);
