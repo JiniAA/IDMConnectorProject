@@ -61,9 +61,11 @@ public class ResponseHandler extends HttpCallsInitialization{
                 flag=0;
                 System.out.println("flag "+flag);
                 System.out.println(((JsonObject) value).keySet());
+                //checking whether Json object is empty or not
                 if(((JsonObject) value).size()==0)
                     entry.put(entryKey, value.toString());
                 else
+                    //if json object not empty
                 flattenJSONObject((JsonObject) value, entryKey);
                 continue;
             }
@@ -81,15 +83,15 @@ public class ResponseHandler extends HttpCallsInitialization{
 
     public static void flattenJSONArray(JsonArray jsonArray,String firstKeys){
             for (int i = 0; i < jsonArray.size(); i++) {
-            String entryKey = (firstKeys == null) ? "" : (String.valueOf(firstKeys) + "[" + i + "]");
-            //String entryKey = firstKeys;
+            //String entryKey = (firstKeys == null) ? "" : (String.valueOf(firstKeys) + "[" + i + "]");
+            String entryKey =String.valueOf(i);
             Object object = jsonArray.get(i);
             if (object instanceof JsonObject) {
                 flattenJSONObject((JsonObject) object, entryKey);
             } else if (object instanceof JsonArray) {
                 flattenJSONArray((JsonArray) object, entryKey);
             }
-            entry.put(entryKey, object.toString());
+            //entry.put(entryKey, object.toString());
         }
     }
 }
