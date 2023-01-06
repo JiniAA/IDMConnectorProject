@@ -31,14 +31,24 @@ public class ResponseHandler extends HttpCallsInitialization{
             JsonParser jsonParser =new JsonParser();
             JsonObject jsonObject= (JsonObject) jsonParser
                     .parse(new InputStreamReader(httpResponse,"UTF-8"));
-            //taking keys of the Jsonobject
+//            String jsonString= String.valueOf(jsonParser
+//                    .parse(new InputStreamReader(httpResponse,"UTF-8")));
+//            Character firstchar=jsonString.charAt(0);
+//            System.out.println(firstchar);
+//            if(firstchar=='{')
+//            {
+//
+//            }
+            //System.out.println(jsonObject);
+            //taking keys of the Jsonobjectt
+
             keys = jsonObject.keySet();
             //taking First key of the json response
             FirstKey = keys.iterator().next();
             System.out.println(FirstKey);
 
             //calling flattenJsonObject Function to iterate through the json response
-            flattenJSONObject(jsonObject,f);
+            handleJSONObject(jsonObject,f);
             System.out.println("DSEentry"+entry);
             System.out.println(entry.size());
         } catch (UnsupportedEncodingException e) {
@@ -47,13 +57,11 @@ public class ResponseHandler extends HttpCallsInitialization{
             e.printStackTrace();
             throw new RuntimeException(e);
         }
-
     }
 
-    public static void flattenJSONObject(JsonObject jsonObject1,String firstKey){
+    public static void handleJSONObject(JsonObject jsonObject1,String firstKey){
         Set<String> keyss = jsonObject1.keySet();
         for (String key : keyss) {
-            //String entryKey = (firstKey == null) ? key : (String.valueOf(firstKey) + '.' + key);
             String entryKey =key;
             Object value = jsonObject1.get(key);
             //System.out.println("value "+value);
@@ -66,14 +74,14 @@ public class ResponseHandler extends HttpCallsInitialization{
                     entry.put(entryKey, value.toString());
                 else
                     //if json object not empty
-                flattenJSONObject((JsonObject) value, entryKey);
+                    handleJSONObject((JsonObject) value, entryKey);
                 continue;
             }
             if (value instanceof JsonArray) {
                 if(((JsonArray) value).size()==0)
                     entry.put(entryKey, value.toString());
                 else
-                flattenJSONArray((JsonArray) value,key);
+                    handleJSONArray((JsonArray) value,key);
 
                 continue;
             }
@@ -81,15 +89,14 @@ public class ResponseHandler extends HttpCallsInitialization{
         }
     }
 
-    public static void flattenJSONArray(JsonArray jsonArray,String firstKeys){
+    public static void handleJSONArray(JsonArray jsonArray,String firstKeys){
             for (int i = 0; i < jsonArray.size(); i++) {
-            //String entryKey = (firstKeys == null) ? "" : (String.valueOf(firstKeys) + "[" + i + "]");
             String entryKey =String.valueOf(i);
             Object object = jsonArray.get(i);
             if (object instanceof JsonObject) {
-                flattenJSONObject((JsonObject) object, entryKey);
+                handleJSONObject((JsonObject) object, entryKey);
             } else if (object instanceof JsonArray) {
-                flattenJSONArray((JsonArray) object, entryKey);
+                handleJSONArray((JsonArray) object, entryKey);
             }
             //entry.put(entryKey, object.toString());
         }
