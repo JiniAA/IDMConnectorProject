@@ -21,23 +21,24 @@ import java.security.cert.X509Certificate;
 import java.util.Base64;
 
 
-public class HttpCallsInitialization extends GetAuthorizationDetails {
-    private static HttpResponse response;
+public class HttpRequestCall extends GetAuthenticationDetails {
+//    private static HttpResponse response;
     private static final String getBasicAuthenticationHeader(String username, String password) {
         String valueToEncode = username + ":" + password;
         return "Basic " + Base64.getEncoder().encodeToString(valueToEncode.getBytes());
     }
     // Get method
-    public static void GET(String baseURI,String endpoint, CloseableHttpClient httpClient) {
+    public static void httpGetRequest(String baseURI,String endpoint, CloseableHttpClient httpClient) {
         try {
             HttpGet httpget = new HttpGet();
             //httpget.setURI(new URI(baseURI+endpoint+ URLEncoder.encode(query, StandardCharsets.UTF_8)));
-            httpget.setURI(new URI(baseURI+endpoint));
-            httpget.addHeader("Authorization", getBasicAuthenticationHeader(us, ps));
+            httpget.setURI(new URI(baseURI + endpoint));
+            httpget.addHeader("Authorization", getBasicAuthenticationHeader(USER_NAME, HTTP_PASSWORD));
             HttpResponse httpResponse = httpClient.execute(httpget);
             if (httpResponse != null) {
                 response = httpResponse;
             }
+
         } catch (Exception e) {
             e.getMessage();
         }

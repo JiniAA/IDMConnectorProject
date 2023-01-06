@@ -1,9 +1,9 @@
 package com.tarento.idm.connector;
 
+import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import org.apache.http.HttpResponse;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -11,44 +11,46 @@ import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.util.Set;
 
-public class ResponseHandler extends HttpCallsInitialization{
+public class JsonResponseHandler extends HttpRequestCall {
     public static String FirstKey;
     public static String f=null;
-
     public static int flag;
-
     public static Set<String> keys ;
 
-    public static void ActionFunction() {
+    public static void handleJsonResponse () {
         try {
-            HttpCallsInitialization.GET(baseURI,endpoint, HttpCallsInitialization.getSSLCustomClient());
-            HttpResponse response = HttpCallsInitialization.getResponse();
             Integer statusCode = response.getStatusLine().getStatusCode();
             System.out.println(statusCode);
-
             InputStream httpResponse= response.getEntity().getContent();
 
             JsonParser jsonParser =new JsonParser();
-            JsonObject jsonObject= (JsonObject) jsonParser
-                    .parse(new InputStreamReader(httpResponse,"UTF-8"));
-//            String jsonString= String.valueOf(jsonParser
-//                    .parse(new InputStreamReader(httpResponse,"UTF-8")));
-//            Character firstchar=jsonString.charAt(0);
-//            System.out.println(firstchar);
-//            if(firstchar=='{')
-//            {
-//
-//            }
-            //System.out.println(jsonObject);
-            //taking keys of the Jsonobjectt
+//            JsonObject jsonObject= (JsonObject) jsonParser
+//                    .parse(new InputStreamReader(httpResponse,"UTF-8"));
 
-            keys = jsonObject.keySet();
-            //taking First key of the json response
-            FirstKey = keys.iterator().next();
-            System.out.println(FirstKey);
+            String jsonString= String.valueOf(jsonParser
+                    .parse(new InputStreamReader(httpResponse,"UTF-8")));
+            Character firstchar=jsonString.charAt(0);
+            System.out.println(firstchar);
+            if(firstchar=='{')
+            {
+                Gson g = new Gson();
+                JsonObject jsonObject=g.fromJson(jsonString,JsonObject.class);
+                handleJSONObject(jsonObject,f);
+                //taking keys of the Jsonobject
+                keys = jsonObject.keySet();
+                //taking First key of the json response
+                FirstKey = keys.iterator().next();
+                System.out.println(FirstKey);
+            }
+            else{
+                Gson g = new Gson();
+                JsonArray jsonArrayResponse=g.fromJson(jsonString,JsonArray.class);
+
+                handleJSONArray(jsonArrayResponse,f);
+            }
 
             //calling flattenJsonObject Function to iterate through the json response
-            handleJSONObject(jsonObject,f);
+           // handleJSONObject(jsonObject,f);
             System.out.println("DSEentry"+entry);
             System.out.println(entry.size());
         } catch (UnsupportedEncodingException e) {
@@ -82,7 +84,6 @@ public class ResponseHandler extends HttpCallsInitialization{
                     entry.put(entryKey, value.toString());
                 else
                     handleJSONArray((JsonArray) value,key);
-
                 continue;
             }
             entry.put(entryKey, value.toString());

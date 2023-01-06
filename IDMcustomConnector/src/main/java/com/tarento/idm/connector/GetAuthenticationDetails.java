@@ -9,25 +9,26 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-public class GetAuthorizationDetails {
-    public static String us = null;
-    public static String ps = null;
-    public static String baseURI =null;
-    public static String endpoint =null;
-    public static String query =null;
+public class GetAuthenticationDetails extends MainConnector {
     final static String filePath
             = "/home/jini/IDM/config";
 
-    public static void readFromFile() throws IOException {
+    public static void getHttpRequestDetails() throws IOException {
         Map<String, String> mapFromFile
-                = HashMapFromTextFile();
-        ps= mapFromFile.get("pass");
-        us= mapFromFile.get("user");
-        baseURI=mapFromFile.get("baseURL");
-        endpoint=mapFromFile.get("end");
+                = ReadFile();
+        //reading from the keys in the text file
+        HTTP_PASSWORD= mapFromFile.get("HTTP_PASSWORD");
+        USER_NAME= mapFromFile.get("USER_NAME");
+        HTTP_BASE_URL=mapFromFile.get("HTTP_BASE_URL");
+        HTTP_ENDPOINT=mapFromFile.get("HTTP_ENDPOINT");
+        AUTHENTICATION_TYPE=mapFromFile.get("AUTHENTICATION_TYPE");
+        CONTENT_TYPE=mapFromFile.get("CONTENT_TYPE");
+        ACCEPT_CONTENT_TYPE=mapFromFile.get("ACCEPT_CONTENT_TYPE");
+        HTTP_METHOD=mapFromFile.get("HTTP_METHOD");
+
         //query=mapFromFile.get("query");
 }
-    public static Map<String,String>HashMapFromTextFile()
+    public static Map<String,String>ReadFile()
     {
         Map<String, String> map
                 = new HashMap<String, String>();
@@ -42,7 +43,7 @@ public class GetAuthorizationDetails {
             // read file line by line
             while ((line = br.readLine()) != null) {
                 // split the line by :
-                String[] parts = line.split("-");
+                String[] parts = line.split(">");
                 String key = parts[0].trim();
                 String value = parts[1].trim();
                 // put key value pair to HashMap if they are not empty
