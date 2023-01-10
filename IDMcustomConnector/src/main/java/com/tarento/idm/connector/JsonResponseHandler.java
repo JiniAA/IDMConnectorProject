@@ -4,6 +4,8 @@ import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import org.json.JSONObject;
+import org.json.JSONTokener;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -16,49 +18,116 @@ public class JsonResponseHandler extends HttpRequestCall {
     public static String f=null;
     public static int flag;
     public static Set<String> keys ;
+    public static JsonParser jsonParser =new JsonParser();
+   public static JsonParser jsonParserObj =new JsonParser();
+    public static JsonParser jsonParserArr =new JsonParser();
+    public static InputStream httpResponse;
+    public static JsonObject jsonObject;
+   // private static InputStream httpRes;
+
 
     public static void handleJsonResponse () {
-        try {
-            Integer statusCode = response.getStatusLine().getStatusCode();
-            System.out.println(statusCode);
-            InputStream httpResponse= response.getEntity().getContent();
+        InputStream httpRes;
 
-            JsonParser jsonParser =new JsonParser();
-//            JsonObject jsonObject= (JsonObject) jsonParser
-//                    .parse(new InputStreamReader(httpResponse,"UTF-8"));
+        try {
+            Integer statusCode = MainConnector.response.getStatusLine().getStatusCode();
+            System.out.println(statusCode);
+
+//            InputStream httpResponse= MainConnector.response.getEntity().getContent();
+//            InputStream httpRes =httpResponse;
+
+              httpResponse= MainConnector.response.getEntity().getContent();
+              httpRes =MainConnector.response.getEntity().getContent();
+
+
+//            JsonParser jsonParser =new JsonParser();
+//            JsonParser jsonParserObj =new JsonParser();
+//            JsonParser jsonParserArr =new JsonParser();
+//            JsonObject jsonObject= (JsonObject) jsonParserObj
+//                  .parse(new InputStreamReader(httpResponse,"UTF-8"));
+//            System.out.println(jsonObject);
+
 
             String jsonString= String.valueOf(jsonParser
                     .parse(new InputStreamReader(httpResponse,"UTF-8")));
-            Character firstchar=jsonString.charAt(0);
-            System.out.println(firstchar);
-            if(firstchar=='{')
+            Object json = new JSONTokener(jsonString).nextValue();
+
+            Gson g = new Gson();
+            if(json instanceof JSONObject)
             {
-                Gson g = new Gson();
-                JsonObject jsonObject=g.fromJson(jsonString,JsonObject.class);
-                handleJSONObject(jsonObject,f);
-                //taking keys of the Jsonobject
-                keys = jsonObject.keySet();
-                //taking First key of the json response
-                FirstKey = keys.iterator().next();
-                System.out.println(FirstKey);
+                JsonObject jsonObject1=g.fromJson(jsonString,JsonObject.class);
+                handleJSONObject(jsonObject1,f);
             }
-            else{
-                Gson g = new Gson();
+            else {
                 JsonArray jsonArrayResponse=g.fromJson(jsonString,JsonArray.class);
 
                 handleJSONArray(jsonArrayResponse,f);
             }
 
+//            JsonArray jsonArray1= (JsonArray) jsonParserArr
+//                    .parse(new InputStreamReader(httpResponse,"UTF-8"));
+//            System.out.println(jsonArray1);
+
+//            JsonParser jsonParser = new JsonParser().parse(new InputStreamReader(httpResponse,"UTF-8"));
+
+//            String type= jsonParser.parse(new InputStreamReader(httpResponse,"UTF-8")).getClass().getName();
+//            System.out.println(type);
+//            String j="com.google.gson.JsonObject";
+//            String Ar="com.google.gson.JsonArray";
+//
+//            if(type.equals(j))
+//            {
+//                JsonResponseHandler.JsonObjectParser(httpRes);
+//                //handleJSONObject(JsonObjectParser(httpRes),f);
+//            }
+//            else{
+//                JsonArray jsonArray = (JsonArray) jsonParser
+//                        .parse(new InputStreamReader(httpRes, "UTF-8"));
+//                handleJSONArray(jsonArray, f);
+//            }
+
+
+//            Character firstchar=jsonString.charAt(0);
+//            System.out.println(firstchar);
+//            if(firstchar=='{')
+//            {
+//                Gson g = new Gson();
+//                JsonObject jsonObject1=g.fromJson(jsonString,JsonObject.class);
+//                handleJSONObject(jsonObject1,f);
+//                //taking keys of the Jsonobject
+//                keys = jsonObject1.keySet();
+//                //taking First key of the json response
+//                FirstKey = keys.iterator().next();
+//                System.out.println(FirstKey);
+//            }
+//            else{
+//                Gson g = new Gson();
+//                JsonArray jsonArrayResponse=g.fromJson(jsonString,JsonArray.class);
+//
+//                handleJSONArray(jsonArrayResponse,f);
+//            }
+//            if(jsonParser.parse(new InputStreamReader(httpResponse,"UTF-8")) instanceof JsonObject)
+//            {
+//                System.out.println("ji");
+//            }
+
             //calling flattenJsonObject Function to iterate through the json response
            // handleJSONObject(jsonObject,f);
-            System.out.println("DSEentry"+entry);
-            System.out.println(entry.size());
+            System.out.println("DSEentry"+MainConnector.entry);
+            System.out.println(MainConnector.entry.size());
         } catch (UnsupportedEncodingException e) {
             throw new RuntimeException(e);
         } catch (IOException e) {
             e.printStackTrace();
             throw new RuntimeException(e);
         }
+    }
+
+    private static void JsonObjectParser(InputStream httpRes) throws UnsupportedEncodingException {
+        JsonObject jsonObject= (JsonObject) jsonParserObj
+                  .parse(new InputStreamReader(httpRes,"UTF-8"));
+        System.out.println(jsonObject);
+
     }
 
     public static void handleJSONObject(JsonObject jsonObject1,String firstKey){
@@ -73,7 +142,7 @@ public class JsonResponseHandler extends HttpRequestCall {
                 System.out.println(((JsonObject) value).keySet());
                 //checking whether Json object is empty or not
                 if(((JsonObject) value).size()==0)
-                    entry.put(entryKey, value.toString());
+                    MainConnector.entry.put(entryKey, value.toString());
                 else
                     //if json object not empty
                     handleJSONObject((JsonObject) value, entryKey);
@@ -81,12 +150,12 @@ public class JsonResponseHandler extends HttpRequestCall {
             }
             if (value instanceof JsonArray) {
                 if(((JsonArray) value).size()==0)
-                    entry.put(entryKey, value.toString());
+                    MainConnector.entry.put(entryKey, value.toString());
                 else
                     handleJSONArray((JsonArray) value,key);
                 continue;
             }
-            entry.put(entryKey, value.toString());
+            MainConnector.entry.put(entryKey, value.toString());
         }
     }
 

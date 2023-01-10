@@ -1,6 +1,7 @@
 package com.tarento.idm.connector;
 
 
+import com.sap.idm.ic.DSEEntry;
 import org.apache.http.HttpResponse;
 
 import java.io.IOException;
@@ -16,6 +17,8 @@ public class MainConnector {
     public static String ACCEPT_CONTENT_TYPE;
     public static String HTTP_METHOD;
     public static HttpResponse response;
+    public static DSEEntry entry = new DSEEntry("DSEENTRY");
+
 
     public static void main(String[] args) throws IOException, URISyntaxException {
         GetAuthenticationDetails.getHttpRequestDetails();

@@ -33,10 +33,10 @@ public class HttpRequestCall extends GetAuthenticationDetails {
             HttpGet httpget = new HttpGet();
             //httpget.setURI(new URI(baseURI+endpoint+ URLEncoder.encode(query, StandardCharsets.UTF_8)));
             httpget.setURI(new URI(baseURI + endpoint));
-            httpget.addHeader("Authorization", getBasicAuthenticationHeader(USER_NAME, HTTP_PASSWORD));
+            httpget.addHeader("Authorization", getBasicAuthenticationHeader(MainConnector.USER_NAME, MainConnector.HTTP_PASSWORD));
             HttpResponse httpResponse = httpClient.execute(httpget);
             if (httpResponse != null) {
-                response = httpResponse;
+                MainConnector.response = httpResponse;
             }
 
         } catch (Exception e) {
@@ -45,7 +45,7 @@ public class HttpRequestCall extends GetAuthenticationDetails {
 
     }
     public static HttpResponse getResponse() {
-        return response;
+        return MainConnector.response;
     }
 
 

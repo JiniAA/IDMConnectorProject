@@ -1,7 +1,5 @@
 package com.tarento.idm.connector;
 
-import com.sap.idm.ic.DSEEntry;
-
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -9,7 +7,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-public class GetAuthenticationDetails extends MainConnector {
+public class GetAuthenticationDetails {
     final static String filePath
             = "/home/jini/IDM/config";
 
@@ -17,14 +15,14 @@ public class GetAuthenticationDetails extends MainConnector {
         Map<String, String> mapFromFile
                 = ReadFile();
         //reading from the keys in the text file
-        HTTP_PASSWORD= mapFromFile.get("HTTP_PASSWORD");
-        USER_NAME= mapFromFile.get("USER_NAME");
-        HTTP_BASE_URL=mapFromFile.get("HTTP_BASE_URL");
-        HTTP_ENDPOINT=mapFromFile.get("HTTP_ENDPOINT");
-        AUTHENTICATION_TYPE=mapFromFile.get("AUTHENTICATION_TYPE");
-        CONTENT_TYPE=mapFromFile.get("CONTENT_TYPE");
-        ACCEPT_CONTENT_TYPE=mapFromFile.get("ACCEPT_CONTENT_TYPE");
-        HTTP_METHOD=mapFromFile.get("HTTP_METHOD");
+        MainConnector.HTTP_PASSWORD= mapFromFile.get("HTTP_PASSWORD");
+        MainConnector.USER_NAME= mapFromFile.get("USER_NAME");
+        MainConnector.HTTP_BASE_URL=mapFromFile.get("HTTP_BASE_URL");
+        MainConnector.HTTP_ENDPOINT=mapFromFile.get("HTTP_ENDPOINT");
+        MainConnector.AUTHENTICATION_TYPE=mapFromFile.get("AUTHENTICATION_TYPE");
+        MainConnector.CONTENT_TYPE=mapFromFile.get("CONTENT_TYPE");
+        MainConnector.ACCEPT_CONTENT_TYPE=mapFromFile.get("ACCEPT_CONTENT_TYPE");
+        MainConnector.HTTP_METHOD=mapFromFile.get("HTTP_METHOD");
 
         //query=mapFromFile.get("query");
 }
@@ -67,7 +65,6 @@ public class GetAuthenticationDetails extends MainConnector {
         }
         return map;
     }
-    public static DSEEntry entry = new DSEEntry("DSEENTRY");
 
 //    public static String baseURI = "https://tarento.freshservice.com/api/v2/";
 //
