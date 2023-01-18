@@ -22,7 +22,7 @@ public class MainConnector {
 
     public static void main(String[] args) throws IOException, URISyntaxException {
         GetAuthenticationDetails.getHttpRequestDetails();
-        HttpRequestCall.httpGetRequest(HTTP_BASE_URL,HTTP_ENDPOINT, HttpRequestCall.getSSLCustomClient());
+        HttpRequestCalls.httpRequest(HTTP_METHOD);
         JsonResponseHandler.handleJsonResponse();
     }
 

@@ -8,7 +8,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class GetAuthenticationDetails {
-    final static String filePath
+    private final static String File_Path
             = "/home/jini/IDM/config";
 
     public static void getHttpRequestDetails() throws IOException {
@@ -23,9 +23,7 @@ public class GetAuthenticationDetails {
         MainConnector.CONTENT_TYPE=mapFromFile.get("CONTENT_TYPE");
         MainConnector.ACCEPT_CONTENT_TYPE=mapFromFile.get("ACCEPT_CONTENT_TYPE");
         MainConnector.HTTP_METHOD=mapFromFile.get("HTTP_METHOD");
-
-        //query=mapFromFile.get("query");
-}
+    }
     public static Map<String,String>ReadFile()
     {
         Map<String, String> map
@@ -34,7 +32,7 @@ public class GetAuthenticationDetails {
 
         try {
             // create file object
-            File file = new File(filePath);
+            File file = new File(File_Path);
             // create BufferedReader object from the File
             br = new BufferedReader(new FileReader(file));
             String line = null;
@@ -66,19 +64,6 @@ public class GetAuthenticationDetails {
         return map;
     }
 
-//    public static String baseURI = "https://tarento.freshservice.com/api/v2/";
-//
-//
-//    public static final String endpoint="tickets/filter?query=";
-//
-//
-//    public static final String query="\"group_id:27000745030 AND status:2\"";
-//
-//
-//    public static final String username="GxNCBm6flOIgnujdqvT";
-
-
-//    public static final String password="X";
 
 
 }

@@ -20,13 +20,28 @@ import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 import java.util.Base64;
 
+import static com.tarento.idm.connector.MainConnector.*;
 
-public class HttpRequestCall extends GetAuthenticationDetails {
+
+public class HttpRequestCalls extends GetAuthenticationDetails {
 //    private static HttpResponse response;
     private static final String getBasicAuthenticationHeader(String username, String password) {
         String valueToEncode = username + ":" + password;
-        return "Basic " + Base64.getEncoder().encodeToString(valueToEncode.getBytes());
+        return AUTHENTICATION_TYPE + " "  + Base64.getEncoder().encodeToString(valueToEncode.getBytes());
     }
+    //HttpRequest method
+    public static void  httpRequest(String Method){
+        try{
+            if(Method.equalsIgnoreCase("GET")) {
+            httpGetRequest(MainConnector.HTTP_BASE_URL, MainConnector.HTTP_ENDPOINT, getSSLCustomClient());
+        }
+
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+    }
+
     // Get method
     public static void httpGetRequest(String baseURI,String endpoint, CloseableHttpClient httpClient) {
         try {
@@ -34,6 +49,8 @@ public class HttpRequestCall extends GetAuthenticationDetails {
             //httpget.setURI(new URI(baseURI+endpoint+ URLEncoder.encode(query, StandardCharsets.UTF_8)));
             httpget.setURI(new URI(baseURI + endpoint));
             httpget.addHeader("Authorization", getBasicAuthenticationHeader(MainConnector.USER_NAME, MainConnector.HTTP_PASSWORD));
+            httpget.addHeader("Content_Type", MainConnector.CONTENT_TYPE);
+            httpget.addHeader("Accept",MainConnector.ACCEPT_CONTENT_TYPE);
             HttpResponse httpResponse = httpClient.execute(httpget);
             if (httpResponse != null) {
                 MainConnector.response = httpResponse;

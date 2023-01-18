@@ -1,5 +1,4 @@
-/home/jini/IDM/IDMConnector/gitFileOfProject/IDMcustomConnector/src/main/java/com/tarento/idm/connector/ConstantsUsed.java
-/home/jini/IDM/IDMConnector/gitFileOfProject/IDMcustomConnector/src/main/java/com/tarento/idm/connector/ExecutionOfResponse.java
 /home/jini/IDM/IDMConnector/gitFileOfProject/IDMcustomConnector/src/main/java/com/tarento/idm/connector/MainConnector.java
-/home/jini/IDM/IDMConnector/gitFileOfProject/IDMcustomConnector/src/main/java/com/tarento/idm/connector/HttpCallsInitialization.java
-/home/jini/IDM/IDMConnector/gitFileOfProject/IDMcustomConnector/src/main/java/com/tarento/idm/connector/GeneralForAllApi.java
+/home/jini/IDM/IDMConnector/gitFileOfProject/IDMcustomConnector/src/main/java/com/tarento/idm/connector/HttpRequestCall.java
+/home/jini/IDM/IDMConnector/gitFileOfProject/IDMcustomConnector/src/main/java/com/tarento/idm/connector/JsonResponseHandler.java
+/home/jini/IDM/IDMConnector/gitFileOfProject/IDMcustomConnector/src/main/java/com/tarento/idm/connector/GetAuthenticationDetails.java
